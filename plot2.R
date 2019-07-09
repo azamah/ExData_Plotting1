@@ -1,0 +1,28 @@
+# Functionn to create plot 2
+createPlot2<-function(){
+  # Load Data
+  hpc <- read.table("ExData_Plotting1/household_power_consumption.txt", header=TRUE, sep=";", na.strings = "?")
+  
+  # Format date
+  hpc$Date <- as.Date(hpc$Date, "%d/%m/%Y")
+  
+  # Filter date
+  hpc <- subset(hpc,Date >= as.Date("2007-2-1") & Date <= as.Date("2007-2-2"))
+  
+  # Remove invalid data
+  hpc <- hpc[complete.cases(hpc),]
+  
+  # Combine Date and Time
+  dateTime <- paste(hpc$Date, hpc$Time)
+
+  # Add column
+  hpc <- cbind(dateTime, hpc)
+  hpc$dateTime <- as.POSIXct(dateTime)
+  
+  # Create Plot 2
+  plot(hpc$Global_active_power~hpc$dateTime, type="l", ylab="Global Active Power (kilowatts)", xlab="")
+  
+  # Save plot
+  dev.copy(png, "ExData_Plotting1/plot2.png", width=480, height=480)
+  dev.off()
+}
